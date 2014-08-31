@@ -1,0 +1,33 @@
+{
+	"queries" : [
+		{
+			"query" : "folks",
+			"count" : 0,
+			"results" : []
+		},
+		{
+			"query" : "people",
+			"count" : 3,
+			"results" : 
+			[
+				{
+					"name" : "Marco Conti",
+					"nationality" : [ "it" ],
+					"about" : "This is me",
+					"group" : 3
+				},
+				{
+					"name" : "Nicholas C",
+					"nationality" : [ "de", "fr"],
+					"address" : "",
+					"group" : 2
+				},
+				{
+					"name" : "John D. Smith",
+					"about" : "I like turtles",
+					"address" : "267 Main Street"
+				}
+			]
+		}
+	]
+}
