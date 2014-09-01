@@ -107,7 +107,7 @@ class Json2CSVConverter(object):
         return dictionary
     
     def __recordsList(self, dictionaries):
-        '''Return a list of records'''
+        '''Return the list of records'''
         
         records = []
         for values in dictionaries:
@@ -127,6 +127,8 @@ class Json2CSVConverter(object):
                             value = None
                     if isinstance(value, unicode):
                         value = value.encode('ascii', errors='backslashreplace')
+                    if isinstance(value, basestring):
+                        value = value.replace('\r\n',' ')
                     record[field] = value
                     
             # now sort record by keys
