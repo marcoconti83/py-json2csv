@@ -14,6 +14,7 @@ import sys
 import csv
 import argparse
 import StringIO
+import codecs
 
 SUPPORTED_SCALAR_TYPES = [basestring, long, int, bool, float]
 SUPPORTED_VECTOR_TYPES = [list, tuple]
@@ -155,9 +156,11 @@ class Json2CSVConverter(object):
             
         output = outputBuffer.getvalue()
         outputBuffer.close()
+        
+        output = unicode(output, 'unicode-escape')
             
         if file:
-            with open(file, "wb") as FILE:
+            with codecs.open(file, "wb", "utf-8") as FILE:
                 FILE.write(output)
                 print len(records), "records written to", file
         else:
