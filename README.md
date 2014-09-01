@@ -72,6 +72,6 @@ for a list of options
 
 Try:
 
-    ./json2csv.py -o o.txt -p queries,1,results -n "{fieldName}_n{index}" sample.json
+    ./json2csv.py -o o.txt -p queries,1,results sample.json
 
 It will convert the `sample.json` into `o.txt`

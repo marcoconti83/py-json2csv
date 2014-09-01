@@ -13,6 +13,7 @@ import json
 import sys
 import csv
 import argparse
+import StringIO
 
 SUPPORTED_SCALAR_TYPES = [basestring, long, int, bool, float]
 SUPPORTED_VECTOR_TYPES = [list, tuple]
@@ -147,12 +148,20 @@ class Json2CSVConverter(object):
 
         sortedHeaders = sorted(self.__createFieldsDictionary().keys())
         
-        with open(file, 'wb') as FILE:
-            writer = csv.writer(FILE)
-            writer.writerow(sortedHeaders)
-            writer.writerows(records)
+        outputBuffer = StringIO.StringIO()
+        writer = csv.writer(outputBuffer)
+        writer.writerow(sortedHeaders)
+        writer.writerows(records)
             
-        print len(records), "records written to", file
+        output = outputBuffer.getvalue()
+        outputBuffer.close()
+            
+        if file:
+            with open(file, "wb") as FILE:
+                FILE.write(output)
+                print len(records), "records written to", file
+        else:
+            print output
             
     def __addFieldHeader(self, fieldName, cardinality):
         '''Adds a field to the list, with the given cardinality. If the field exists already, uses the max cardinality between the two'''
@@ -174,9 +183,9 @@ class Json2CSVConverter(object):
 ##############################################################################
 if __name__ == "__main__":
     
-    parser = argparse.ArgumentParser(description="Converts a JSON file with an array of records to a CSV (comma separated values) file")
+    parser = argparse.ArgumentParser(description="Converts a JSON file with an array of records to CSV (comma separated values)")
     parser.add_argument("json_file", help="The json input file")
-    parser.add_argument("-o", "--output-file", help="The csv output file", default="out.csv")
+    parser.add_argument("-o", "--output-file", help="Output to the specified file", default=None)
     parser.add_argument("-p", "--json-path", help="Path (comma-separated) inside the JSON to the array of records to converts, e.g. 'results,array' will point to the first-level field 'results' and then to its subfield 'array'. Leave empty only if the entire JSON is already an array of records", default=None)
     parser.add_argument("-n", "--array-field-naming", help="Format for naming of sub-fields for array-like fields. Use '{fieldName}' as a placeholder of the field name, and {index} as a placeholder for the sub-field index. This string is used in Python's str.format() function, please refer to the Python documentation for more advanced usages", default="{fieldName}_{index}")
     
